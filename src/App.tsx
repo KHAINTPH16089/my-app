@@ -16,6 +16,13 @@ import ProductManager from './page/adminHomePage/productManager';
 import Cart from './page/product/card';
 import PrivateRouter from './utils/PrivateRouter';
 
+import ProductLab from './lab-3,4/view/product';
+import ProductAddLab from './lab-3,4/view/productAdd';
+import ProductEditLab from './lab-3,4/view/productEdit';
+import CategoryLab from './lab-3,4/view/category';
+import CategoryAddLab from './lab-3,4/view/categoryAdd';
+import CategoryEditLab from './lab-3,4/view/categoryEdit';
+
 function App() {
   return (
     <div className="App">
@@ -29,6 +36,15 @@ function App() {
               <Route path='card' element={<Cart />} />
             </Route>
             
+          </Route>
+          <Route path='lab' >
+            <Route index element={<ProductLab />} />
+            <Route path='add' element={<ProductAddLab />} />
+            <Route path='addCate' element={<CategoryAddLab />} />
+            <Route path='category' element={<CategoryLab />} />
+            <Route path='edit/:id' element={<ProductEditLab />} />
+            <Route path='editCate/:id' element={<CategoryEditLab />} />
+            <Route path='card' element={<Cart />} />
           </Route>
           <Route path='user'>
             <Route path='signup' element={<Signup />}/>
