@@ -1,71 +1,48 @@
 import React, {useState, useEffect} from 'react';
-import logo from './logo.svg';
-import './App.css';
-import Login from './page/login';
-import Students from './page/student';
-import Product from './page/product/product';
-import Logins from './page/register/login';
+import { Routes, Route, Link } from "react-router-dom";
 
+import './App.css';
+import Signin from './page/register/signin';
+import Signup from './page/register/signup';
+import Product from './page/product/product';
+import HomePage from './page/Homepage';
+import AdminHomePage from './page/adminHomePage';
+import AdminLayout from './page/layouts/AdminLayout';
+import ClientLayout from './page/layouts/ClientLayout';
+import ProductDetail from './page/product/productDetail';
+import ProductForm from './page/adminHomePage/productEdit';
+import ProductAdd from './page/adminHomePage/productAdd';
+import ProductManager from './page/adminHomePage/productManager';
+import Cart from './page/product/card';
+import PrivateRouter from './utils/PrivateRouter';
 
 function App() {
-  const heads = [
-    {
-        key: "name",
-        name: "tên",
-    },
-    {
-        key: "age",
-        name: "tuổi",
-    },
-    {
-        key: "phone",
-        name: "số điện thoại",
-    },
-    {
-        key: "email",
-        name: "email",
-    },
-    {
-        key: "edit",
-        name: "chỉnh sửa",
-    }
-]
-
-  const datas = [
-      {
-          name: "nguyễn trần khải",
-          tuoi: "20",
-          phone: "0352606412",
-          email: "khai@gmail.com",
-      },
-      {
-          name: "nguyễn trần khải",
-          tuoi: "20",
-          phone: "0352606412",
-          email: "khai@gmail.com",
-      }
-]
-type rows = {
-  name: string,
-  tuoi: string,
-  phone: string,
-  email: string,
-}
-  const [show, setShow] = useState(false);
-
-
   return (
     <div className="App">
-      <Login />
-      <Logins />
-      <button onClick={()=>{setShow(!show)}} >{show === true ? "unshow": "show"} danh sách sinh viên</button>< br/>
-
-
-      <header className="App-header">
-        
         {/* {show && <Product />} */}
-        {show && <Students data={datas} head={heads}/>}
-      </header>
+        <Routes>
+          <Route path='/' element={<ClientLayout />}>
+            <Route index element={<HomePage />} />
+            <Route path='product' >
+              <Route index element={<Product />} />
+              <Route path=':id' element={<ProductDetail />} />
+              <Route path='card' element={<Cart />} />
+            </Route>
+            
+          </Route>
+          <Route path='user'>
+            <Route path='signup' element={<Signup />}/>
+            <Route path='signin' element={<Signin />}/>
+          </Route>
+          <Route path='admin' element={<PrivateRouter><AdminLayout /></PrivateRouter>}>
+            <Route index element={<AdminHomePage />} />
+            <Route path='product' >
+              <Route index element={<ProductManager />} />
+              <Route path='add' element={<ProductAdd />} />
+              <Route path=':id/edit' element={<ProductForm/>} />
+            </Route>
+          </Route>
+        </Routes>
     </div>
   );
 }
