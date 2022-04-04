@@ -1,5 +1,6 @@
 import React from "react";
 import { Link, Outlet } from "react-router-dom";
+import Footer from "../adminHomePage/footer";
 
 type propsType = {}
 
@@ -126,6 +127,7 @@ function AdminLayout(props: propsType){
       </div>
                 
             </div>
+            <Footer />
         </div>
     )
 }

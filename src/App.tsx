@@ -15,13 +15,9 @@ import ProductAdd from './page/adminHomePage/productAdd';
 import ProductManager from './page/adminHomePage/productManager';
 import Cart from './page/product/card';
 import PrivateRouter from './utils/PrivateRouter';
-
-import ProductLab from './lab-3,4/view/product';
-import ProductAddLab from './lab-3,4/view/productAdd';
-import ProductEditLab from './lab-3,4/view/productEdit';
-import CategoryLab from './lab-3,4/view/category';
-import CategoryAddLab from './lab-3,4/view/categoryAdd';
-import CategoryEditLab from './lab-3,4/view/categoryEdit';
+import Contact from './page/contact/contact';
+import Introduce from './page/introduce/introduce';
+import About from './page/about/about';
 
 function App() {
   return (
@@ -35,16 +31,9 @@ function App() {
               <Route path=':id' element={<ProductDetail />} />
               <Route path='card' element={<Cart />} />
             </Route>
-            
-          </Route>
-          <Route path='lab' >
-            <Route index element={<ProductLab />} />
-            <Route path='add' element={<ProductAddLab />} />
-            <Route path='addCate' element={<CategoryAddLab />} />
-            <Route path='category' element={<CategoryLab />} />
-            <Route path='edit/:id' element={<ProductEditLab />} />
-            <Route path='editCate/:id' element={<CategoryEditLab />} />
-            <Route path='card' element={<Cart />} />
+            <Route path='introduce' element={<Introduce />} />
+            <Route path='contact' element={<Contact />} />
+            <Route path='about' element={<About />} />
           </Route>
           <Route path='user'>
             <Route path='signup' element={<Signup />}/>

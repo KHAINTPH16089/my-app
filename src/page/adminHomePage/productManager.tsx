@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { productType } from "../../type/productType";
-import { getProducts, remove, update} from "../../api/product";
+import { getProductsPage, remove, update} from "../../api/product";
 
 type productMAnagerProps = {}
 
@@ -10,8 +10,8 @@ function ProductManager(props: productMAnagerProps){
 
     useEffect(()=>{
         const getProductlist = async () => {
-            const { data } = await getProducts();
-            setProduct(data);
+            const { data } = await getProductsPage(1, 20 , null, null, null );
+            setProduct(data[0].value);        
         }
         getProductlist();
     },[]);
@@ -35,7 +35,7 @@ function ProductManager(props: productMAnagerProps){
                 <thead className="bg-gray-50">
                   <tr>
                     <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        STT
+                      STT
                     </th>
                     <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       tên sản phẩm
@@ -47,10 +47,10 @@ function ProductManager(props: productMAnagerProps){
                       ảnh
                     </th>
                     <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      giá
+                      trạng thái
                     </th>
                     <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Danh mục
+                      giá
                     </th>
                     <th scope="col" className="relative px-6 py-3">
                       <span className="sr-only">chỉnh sửa</span>
@@ -80,15 +80,15 @@ function ProductManager(props: productMAnagerProps){
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-sm text-gray-900">
-                          {}
+                          {item.desc}
                       </div>
                       
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                    <img src=" ${post.img}" width="100px" />
+                    <img src={item.image} width="80px" />
                     </td>
                     <td className="px-6 py-4  whitespace-nowrap text-sm text-gray-500">
-                        {item.price}
+                        {item.status == 1 ? "còn hàng" : "hết hàng"}
                     </td>
                     <td className="px-6 py-4  whitespace-nowrap text-sm text-gray-500">
                         {item.price}

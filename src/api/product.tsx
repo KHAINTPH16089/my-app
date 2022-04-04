@@ -6,11 +6,8 @@ if(localStorage.getItem('user')){
     var users = JSON.parse(localStorage.getItem('user') || '');
 }
 
-export const getProductsLimit = (limit: number | undefined) => {
-    return axios.get(`/products?limit=${limit ? limit : ""}`);
-}
-export const getProductsPage = (page: number | undefined) => {
-    return axios.get(`/products?page=${page ? page : ""}`);
+export const getProductsPage = (page: number | undefined, perPage: number | undefined, sortBy: string | null, search: string | null, price: number | string | null) => {
+    return axios.get(`/products?page=${page ? page : null}&perPage=${perPage ? perPage : null}${sortBy != null ? `&sortBy=${sortBy}` : ''}${search != null ? `&search=${search}` : ''}${price != null ? `&price=${price}` : ''}`);
 }
 export const getProducts = () => {
     return axios.get(`/products`);

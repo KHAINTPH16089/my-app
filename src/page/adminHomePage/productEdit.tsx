@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { productType } from "../../type/productType";
 import { SubmitHandler, useForm} from "react-hook-form";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { getProduct, getProducts, update } from "../../api/product";
 import { getAll } from "../../api/category";
 import { getValue } from "@testing-library/user-event/dist/utils";
@@ -13,6 +13,9 @@ type category ={
 type inputs = {
     name: string,
     price: number,
+    desc: string,
+    image: string,
+    status: number,
     category: string
 }
 type ProductEditProps = {
@@ -76,6 +79,8 @@ function ProductEdit(props: ProductEditProps){
 
     return (
         <>
+        
+        <button className="w-28 h-8 mb-3 pl-6 border-1 rounded flex justify-start bg-indigo-500 hover:bg-indigo-800 text-white "><Link className="hover:text-white" to={"/admin/product"}>Quay về</Link></button>
       <form onSubmit={handleSubmit(onSubmit)}>
   <div className="form-group flex flex-col items-start">
     <label htmlFor="exampleInputEmail1" className="">Tên sản phẩm</label>
@@ -87,6 +92,21 @@ function ProductEdit(props: ProductEditProps){
     <input type="number" className="form-control" id="exampleInputPassword1" placeholder="Password" {...register("price",{required: true})} />
     {errors.price && <span>Bắt buộc nhập trường này</span>}
   </div>
+  <div className="form-group flex flex-col items-start">
+        <label htmlFor="exampleInputPassword1">Giá</label>
+        <input type="text" className="form-control" id="exampleInputPassword1" {...register("desc",{required: true})} placeholder="Nhập mô tả sản phẩm"/>
+        {errors.desc && <span>Bắt buộc nhập trường này</span>}
+    </div>
+    <div className="form-group flex flex-col items-start">
+        <label htmlFor="exampleInputPassword1">Giá</label>
+        <input type="text" className="form-control" id="exampleInputPassword1" {...register("image",{required: true})} placeholder="thêm ảnh sản phẩm"/>
+        {errors.image && <span>Bắt buộc nhập trường này</span>}
+    </div>
+    <div className="form-group flex flex-col items-start">
+        <label htmlFor="exampleInputPassword1">Giá</label>
+        <input type="number" className="form-control" id="exampleInputPassword1" {...register("status",{required: true})} placeholder="thêm ảnh sản phẩm"/>
+        {errors.status && <span>Bắt buộc nhập trường này</span>}
+    </div>
   <div className="form-group flex flex-col items-start">
     <label htmlFor="exampleFormControlSelect1">Danh mục</label>
     <select className="form-control" id="exampleFormControlSelect1" {...register("category",{required: true})}>
