@@ -1,8 +1,11 @@
 import React, {useEffect, useState} from "react"
 import { Link } from "react-router-dom";
-import { getProductsPage } from "../../api/product";
+import { getProduct, getProductsPage } from "../../api/product";
 import { productType } from "../../type/productType";
 
+type cartType = {
+  _id:string, name:string, price:number, image:string, quantily: 1
+}
 function Product() {
     const [product, setProduct] = useState<productType[]>([]);
     const [so, setSo] = useState<number>(1);
@@ -12,43 +15,49 @@ function Product() {
     const sortBy = sort ? sort : null;
     const [search , setSearch] = useState<string>();
     const tim = search ? search : null;
-    const [price , setPrice] = useState<string>('0');
+    const [price , setPrice] = useState<string>("1");
     const gia = price ? price : null;
     const [value , setValue] = useState<any>();
     const values = value ? value : null;
-    useEffect(()=>{
-      const handleGetProduct = async ()=> {
-          const { data } = await getProductsPage(so, countSP, sortBy, tim, gia);
-          setProduct(data[0].value);
-          setCount(Math.ceil(data[1].value / countSP));
-          
-      }
-      
-      handleGetProduct();
-    },[sort, price])
 
     useEffect(()=>{
       const handleGetProduct = async ()=> {
           const { data } = await getProductsPage(so, countSP, sortBy, tim, gia);
           setProduct(data[0].value);
           setCount(Math.ceil(data[1].value / countSP));
-          
+          setSo(1);
       }
       
       handleGetProduct();
-    },[search])
-    
+  },[search, sort, price])
 
     useEffect(()=>{
         const handleGetProduct = async ()=> {
             const { data } = await getProductsPage(so, countSP, sortBy, tim, gia);
             setProduct(data[0].value);
             setCount(Math.ceil(data[1].value / countSP));
-            
         }
         
         handleGetProduct();
     },[so])
+    
+    const [carts, setCart] = useState<cartType[]>([])
+    const handleAddToCart = async (_id: any) => {
+      const {data} = await getProduct(_id);
+      var cart = JSON.parse(localStorage.getItem("cart") as string);
+      setCart(cart);
+        if (cart == null){
+            cart = [];
+            cart.push({_id:data._id, name:data.name, price:data.price, image:data.image, quantily: 1});
+        }else{
+            let item = carts.find(item => item._id == _id );
+            
+            if(item) item.quantily++;
+            else cart.push({_id:data._id, name:data.name, price:data.price, image:data.image, quantily: 1});
+            console.log(item);
+        }
+        localStorage.setItem("cart", JSON.stringify(cart));
+    }
     // (item.price * item.sale / 100) sale
     return(
         <div className="mx-6">  
@@ -59,6 +68,15 @@ function Product() {
             <div className=" ml-12 mt-1 ">
               <input className="w-48 h-8 pl-4 border-1 border-red-500 hover:border-red-500 hover:border-1" placeholder="Tìm kiếm..." type="text" onChange={(e)=> {setValue(e.target.value)}}/>
               <button className="w-20 h-8 bg-red-500 text-white" onClick={()=>{setSearch(values)}}>search</button>
+            </div>
+            <div className="mt-1">
+                <label htmlFor="" className="mr-2 font-semibold ">sắp xếp</label>
+                <select className=" w-40 h-8 border-1 border-red-500 mr-4 bg-red-500 text-white rounded-full pl-2" name="" id="" onChange={(e) => {setPrice(e.target.value)}}>
+                    <option value="2000000">giá lớn hơn 2tr</option>
+                    <option value="4000000">giá lớn hơn 4tr</option>
+                    <option value="10000000">giá lớn hơn 10tr</option>
+                    <option value="20000000">giá lớn hơn 20tr</option>
+                </select>
             </div>
             <div className="mt-1">
                 <label htmlFor="" className="mr-2 font-semibold ">sắp xếp</label>
@@ -83,7 +101,7 @@ function Product() {
                   <hr className="ml-6 w-60 my-3 " />
                   <div className="flex">
                     <button className="ml-5 mb-3 h-9 w-28 pl-6 pt-1 rounded-full flex items-start  border text-white border-red-500 bg-blue-500 hover:bg-red-500 hover:text-white" > <Link className="hover:text-white" to={`/product/${data._id}`}>Chi tiết</Link> </button>
-                    <button className="ml-9 mb-3 h-9 w-24 rounded-full border border-red-500   hover:bg-orange-600 hover:text-white">MUA</button>
+                    <button className="ml-9 mb-3 h-9 w-24 rounded-full border border-red-500   hover:bg-orange-600 hover:text-white" onClick={() => {handleAddToCart(data._id)}}>MUA</button>
                   </div>
                 </div>
               )

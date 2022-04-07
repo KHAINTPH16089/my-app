@@ -7,7 +7,7 @@ if(localStorage.getItem('user')){
 }
 
 export const getProductsPage = (page: number | undefined, perPage: number | undefined, sortBy: string | null, search: string | null, price: number | string | null) => {
-    return axios.get(`/products?page=${page ? page : null}&perPage=${perPage ? perPage : null}${sortBy != null ? `&sortBy=${sortBy}` : ''}${search != null ? `&search=${search}` : ''}${price != null ? `&price=${price}` : ''}`);
+    return axios.get(`/products?page=${page ? page : null}&perPage=${perPage ? perPage : null}${sortBy != null ? `&sortBy=${sortBy}` : ''}${search != null ? `&search=${search}` : ''}${price != null ? `&price=${price}` : '&price=1'}`);
 }
 export const getProducts = () => {
     return axios.get(`/products`);
@@ -42,4 +42,12 @@ export const update = (product: any, id: string | undefined) => {
             }
         }
     );
+}
+export const upload = (base64: any) => {
+    
+    return fetch("http://localhost:3001/api/upload",{
+        method: "POST",
+        body: JSON.stringify({data: base64}),
+        headers:{ "Content-type": "application/json"}
+    })
 }

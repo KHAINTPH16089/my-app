@@ -25,7 +25,7 @@ function Header() {
           <p className="mr-48">HOTLINE: 0352606412</p> 
           <div className=" flex mr-12 text-gray-400">
           <ul className="flex">
-                  <li><Link to="/product/cart" className="px-4 hover:text-orange-300 border-r-2">giỏ hàng</Link></li>
+                  <li><Link to="/product/card" className="px-4 hover:text-orange-300 border-r-2">giỏ hàng</Link></li>
                 </ul>
             { user ? <ul className="flex">
               <li><Link to={"/"} onClick={checkLogOut}  id="logout" className="px-4  hover:text-orange-300 cursor-pointer border-r-2">Đăng xuất</Link></li>

@@ -13,11 +13,12 @@ import ProductDetail from './page/product/productDetail';
 import ProductForm from './page/adminHomePage/productEdit';
 import ProductAdd from './page/adminHomePage/productAdd';
 import ProductManager from './page/adminHomePage/productManager';
-import Cart from './page/product/card';
+import Card from './page/product/card';
 import PrivateRouter from './utils/PrivateRouter';
 import Contact from './page/contact/contact';
 import Introduce from './page/introduce/introduce';
 import About from './page/about/about';
+import CheckOut from './page/product/checkout';
 
 function App() {
   return (
@@ -29,7 +30,8 @@ function App() {
             <Route path='product' >
               <Route index element={<Product />} />
               <Route path=':id' element={<ProductDetail />} />
-              <Route path='card' element={<Cart />} />
+              <Route path='card' element={<Card />} />
+              <Route path='checkOut' element={<CheckOut />} />
             </Route>
             <Route path='introduce' element={<Introduce />} />
             <Route path='contact' element={<Contact />} />

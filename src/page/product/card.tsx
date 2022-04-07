@@ -1,6 +1,22 @@
-import React, {useState} from "react"
+import React, {useEffect, useState} from "react"
+import { Link } from "react-router-dom";
+type cartType = {
+  _id:string, name:string, price:number, image:string, quantily: 1
+}
+function Card() {
+    const [carts , setCarts] = useState<cartType[]>([])
+    const [total ,setTotal] = useState(0);
+    const cart = JSON.parse(localStorage.getItem("cart") as string);
+    useEffect(()=>{
+      const getTotal = () => {
+        
+      }
 
-function Cart() {
+      
+      setCarts(cart);
+      getTotal()
+    },[])
+    
     return(
         <>
             <div className="mx-6 mt-6">
@@ -20,29 +36,29 @@ function Cart() {
           </tr>
         </thead>
         <tbody className="mt-6">
-        
-          <tr className="mt-6">
-            <td></td>
-            <td><img src="${item.img}" alt="" className="w-12"/></td>
-            <td></td>
+          {carts.map((data)=>
+          <tr key={data._id} className="mt-6">
+            <td>{data.name}</td>
+            <td><img src="${data.img}" alt="" className="w-12"/></td>
+            <td>{data.price}</td>
             <td>
-              <input data-id="${item.id}" className="btn btn-decrease border border-gray-200 w-6 bg-gray-200" type="button" value="-"/>
-              <input className="border border-gray-200 pl-2" type="text" value="${item.quantity}" id="quantity" name="quantily" min="1"/>
-              <input data-id="${item.id}" className="btn btn-increase border border-gray-200 w-6 bg-gray-200" type="button" value="+"/>
+              <input data-id="${data.id}" className="btn btn-decrease border border-gray-200 w-6 bg-gray-200" type="button" value="-"/>
+              <input className="border border-gray-200 pl-2" type="text" value={data.quantily} id="quantity" name="quantily" min="1"/>
+              <input data-id="${data.id}" className="btn btn-increase border border-gray-200 w-6 bg-gray-200" type="button" value="+"/>
             </td>
-            <td></td>
+            <td>{data.price * data.quantily}</td>
             <div className="hidden"></div>
             <td><button className="btn btn-remove w-16 h-6 border border-red-500 hover:bg-purple-500">xóa</button></td>
           </tr>
-
+        )}
         </tbody>
       </table>
-      <div className="mt-6 font-extrabold"><span>Tổng tiền: </span><span></span></div>
-      <button className="border border-red-500 w-28 h-8 ml-10 mt-6 hover:bg-purple-500"><a href="/#/cart/checkout">Đặt hàng</a></button>
+      <div className="mt-6 font-extrabold"><span>Tổng tiền: </span><span>{total}</span></div>
+      <button className="border border-red-500 w-28 h-8 ml-10 mt-6 hover:bg-purple-500"><Link to="/product/checkOut">Đặt hàng</Link></button>
     </form>
   </div>
         </>
         
     )
 }
-export default Cart;
+export default Card;

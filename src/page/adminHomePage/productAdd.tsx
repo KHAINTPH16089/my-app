@@ -1,15 +1,16 @@
+import axios from "axios";
 import React, {useState, useEffect} from "react";
 import {useForm, SubmitHandler} from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { getAll } from "../../api/category";
-import { createProduct, getProducts } from "../../api/product";
+import { createProduct, getProducts, upload } from "../../api/product";
 import { productType } from "../../type/productType";
 
 type inputs ={
     name: string,
     price: number,
     desc: string,
-    image: string
+    image: any,
     category: string
 }
 type category ={
@@ -21,10 +22,28 @@ type productAddProps= {
 }
 function ProductAdd(props: productAddProps){
     const { register, handleSubmit , formState: {errors}} = useForm<inputs>();
-
     const navigate = useNavigate();
+    const [fileInput, setFileInput] = useState('');
+    const [reviewSource, setreviewSource] = useState<string>('')
 
     const [products, setProducts] = useState<productType[]>([]);
+
+    //upload ảnh
+    const handleImage = (e: any) => {
+        const file = e.target.files[0]
+        reviewFile(file)
+        
+    }
+    const reviewFile = (file:any) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onloadend = () => {
+            setreviewSource(reader.result as string)
+            console.log(reviewSource);
+            
+        }
+    }
+
 
     useEffect(()=>{
         const getProductlist = async () => {
@@ -33,17 +52,19 @@ function ProductAdd(props: productAddProps){
         }
         getProductlist();
     },[]);
-
+    
     const onHandleAdd = async (product: any) =>{
         const {data} = await createProduct(product);
         setProducts([...products, data])
     }
-
-    const onSubmit: SubmitHandler<inputs> = (dataInputs) => {
-        onHandleAdd(dataInputs);
-        console.log(dataInputs);
+    
+    const onSubmit: SubmitHandler<inputs> = async (dataInputs) => {
+        if(!reviewSource) return;
+        const { url, public_id } = await (await upload(reviewSource)).json();
         
-        //navigate("/admin/product");
+        dataInputs.image = url;
+        onHandleAdd(dataInputs);
+        navigate("/admin/product");
     }
 
     const [category, setCategory] = useState<category[]>([]);
@@ -68,18 +89,21 @@ function ProductAdd(props: productAddProps){
             </div>
             <div className="form-group flex flex-col items-start">
                 <label htmlFor="exampleInputPassword1">Giá</label>
-                <input type="number" className="form-control" id="exampleInputPassword1" {...register("price",{required: true})} placeholder="Nhập giá sản phẩm"/>
+                <input type="number" className="form-control" id="exampleInputPassword1" {...register("price",{required: true, valueAsNumber: true})} placeholder="Nhập giá sản phẩm"/>
                 {errors.price && <span>Bắt buộc nhập trường này</span>}
             </div>
             <div className="form-group flex flex-col items-start">
-                <label htmlFor="exampleInputPassword1">Giá</label>
+                <label htmlFor="exampleInputPassword1">mô tả</label>
                 <input type="text" className="form-control" id="exampleInputPassword1" {...register("desc",{required: true})} placeholder="Nhập mô tả sản phẩm"/>
                 {errors.price && <span>Bắt buộc nhập trường này</span>}
             </div>
             <div className="form-group flex flex-col items-start">
-                <label htmlFor="exampleInputPassword1">Giá</label>
-                <input type="text" className="form-control" id="exampleInputPassword1" {...register("image",{required: true})} placeholder="thêm ảnh sản phẩm"/>
+                <label htmlFor="exampleInputPassword1">Thêm ảnh</label>
+                <input type="file" className="form-control" id="exampleInputPassword1" {...register("image",{required: true})} onChange={handleImage} placeholder="thêm ảnh sản phẩm"/>
                 {errors.price && <span>Bắt buộc nhập trường này</span>}
+            </div>
+            <div className="form-group flex flex-col items-start my-4 ">
+                { reviewSource ? <img width={300} src={reviewSource} alt="" /> : <img width={300} src="https://thumbs.dreamstime.com/b/no-thumbnail-image-placeholder-forums-blogs-websites-148010362.jpg" alt="" />}
             </div>
             <div className="form-group flex flex-col items-start">
                 <label htmlFor="exampleFormControlSelect1">Danh mục</label>

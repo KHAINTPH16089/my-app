@@ -47,7 +47,7 @@ function HomePage(){
                   <hr className="ml-6 w-60 my-3 " />
                   <div className="flex">
                     <button className="ml-5 mb-3 h-9 w-28 pl-6 pt-1 rounded-full flex items-start  border text-white border-red-500 bg-blue-500 hover:bg-red-500 hover:text-white" > <Link className="hover:text-white" to={`/product/${data._id}`}>Chi tiết</Link> </button>
-                    <button className="ml-9 mb-3 h-9 w-24 rounded-full border border-red-500   hover:bg-orange-600 hover:text-white">MUA</button>
+                    <button className="ml-9 mb-3 h-9 w-24 rounded-full border border-red-500   hover:bg-orange-600 hover:text-white" >MUA</button>
                   </div>
                 </div>
               )
