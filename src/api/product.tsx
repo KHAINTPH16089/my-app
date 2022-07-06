@@ -44,7 +44,7 @@ export const update = (product: any, id: string | undefined) => {
     );
 }
 export const upload = (base64: any) => {
-    return fetch("http://localhost:3002/api/upload",{
+    return fetch("https://react-nodejs.vercel.app/api/upload",{
         method: "POST",
         body: JSON.stringify({data: base64}),
         headers:{ "Content-type": "application/json"}
