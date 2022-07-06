@@ -11,7 +11,6 @@ function Header() {
     
     const navigate = useNavigate();
     const checkLogOut = () => {
-     
       const check = window.confirm("bạn có muốn đăng xuất");
       if(check){
         localStorage.removeItem("user");
@@ -25,15 +24,15 @@ function Header() {
           <p className="mr-48">HOTLINE: 0352606412</p> 
           <div className=" flex mr-12 text-gray-400">
           <ul className="flex">
-                  <li><Link to="/product/card" className="px-4 hover:text-orange-300 border-r-2">giỏ hàng</Link></li>
+                  <li><Link to="/product/card" className="px-4 hover:text-red-600 border-r-2">giỏ hàng</Link></li>
                 </ul>
-            { user ? <ul className="flex">
-              <li><Link to={"/"} onClick={checkLogOut}  id="logout" className="px-4  hover:text-orange-300 cursor-pointer border-r-2">Đăng xuất</Link></li>
-                {users.user.role != 0 ? <li><Link to={"/admin/product"}  id="logout" className="px-4 py-5 hover:text-orange-300 cursor-pointer">Admin</Link></li>: null}
+            { users ? <ul className="flex">
+              <li><Link to={"/"} onClick={checkLogOut}  id="logout" className="px-4  hover:text-red-600 cursor-pointer border-r-2">Đăng xuất</Link></li>
+                {users.user.role != 0 ? <li><Link to={"/admin/product"}  id="logout" className="px-4 py-5 hover:text-red-600 cursor-pointer">Admin</Link></li>: null}
               </ul>
               : <ul className="flex">
-                  <li><Link to="/user/signin" className="px-4 hover:text-orange-300 border-r-2">Đăng Nhập</Link></li>
-                  <li><Link to="/user/signup" className="px-4 hover:text-orange-300">Đăng ký</Link></li>
+                  <li><Link to="/user/signin" className="px-4 hover:text-red-600 border-r-2">Đăng Nhập</Link></li>
+                  <li><Link to="/user/signup" className="px-4 hover:text-red-600">Đăng ký</Link></li>
                 </ul>
             }
 
@@ -46,11 +45,11 @@ function Header() {
         </div>
         <div className="ml-80">
           <ul className="flex mt-2 pt-3">
-            <li className="ml-4 mr-4 pb-3 hover:text-red-400 hover:border-b-4 border-purple-400 font-semibold"><Link className="hover:text-red-400" to="/">Trang chủ</Link></li>
-            <li className="ml-4 mr-4 pb-3 hover:text-red-400 hover:border-b-4 border-purple-400 font-semibold"><Link className="hover:text-red-400" to="product">Sản phẩm</Link></li>
-            <li className="ml-4 mr-4 pb-3 hover:text-red-400 hover:border-b-4 border-purple-400 font-semibold"><Link className="hover:text-red-400" to="about">Blog</Link></li>
-            <li className="ml-4 mr-4 pb-3 hover:text-red-400 hover:border-b-4 border-purple-400 font-semibold"><Link className="hover:text-red-400" to="introduce">Giới thiệu</Link></li>
-            <li className="ml-4 mr-4 pb-3 hover:text-red-400 hover:border-b-4 border-purple-400 font-semibold"><Link className="hover:text-red-400" to="contact">Liên hệ</Link></li>
+            <li className="ml-4 mr-4 pb-3 hover:text-red-400 hover:border-b-4 border-red-600 font-semibold"><Link className="hover:text-red-400" to="/">Trang chủ</Link></li>
+            <li className="ml-4 mr-4 pb-3 hover:text-red-400 hover:border-b-4 border-red-600 font-semibold"><Link className="hover:text-red-400" to="product">Sản phẩm</Link></li>
+            <li className="ml-4 mr-4 pb-3 hover:text-red-400 hover:border-b-4 border-red-600 font-semibold"><Link className="hover:text-red-400" to="about">Blog</Link></li>
+            <li className="ml-4 mr-4 pb-3 hover:text-red-400 hover:border-b-4 border-red-600 font-semibold"><Link className="hover:text-red-400" to="introduce">Giới thiệu</Link></li>
+            <li className="ml-4 mr-4 pb-3 hover:text-red-400 hover:border-b-4 border-red-600 font-semibold"><Link className="hover:text-red-400" to="contact">Liên hệ</Link></li>
           </ul>
         </div>
       </div>

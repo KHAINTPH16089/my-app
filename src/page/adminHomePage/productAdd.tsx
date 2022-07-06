@@ -11,7 +11,8 @@ type inputs ={
     price: number,
     desc: string,
     image: any,
-    category: string
+    category: string,
+    public_id: string
 }
 type category ={
     _id: string,
@@ -61,6 +62,8 @@ function ProductAdd(props: productAddProps){
     const onSubmit: SubmitHandler<inputs> = async (dataInputs) => {
         if(!reviewSource) return;
         const { url, public_id } = await (await upload(reviewSource)).json();
+        dataInputs.public_id = public_id;
+        console.log(dataInputs.public_id);
         
         dataInputs.image = url;
         onHandleAdd(dataInputs);

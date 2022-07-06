@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from "react";
 import {Link} from "react-router-dom";
-import { getProducts, getProductsPage } from "../../api/product";
+import { getProduct, getProducts, getProductsPage } from "../../api/product";
 
 type productType = {
   _id: number | string,
   name: string,
-  price: number
+  price: number,
+  status: number
 }
-
+type cartType = {
+  _id:string, name:string, price:number, image:string, quantily: number
+}
 function HomePage(){
     const [products, setProducts] = useState<productType[]>([]);
 
@@ -20,6 +23,23 @@ function HomePage(){
       handleSetProducts();
     },[])
 
+    const [carts, setCart] = useState<cartType[]>([])
+    const handleAddToCart = async (_id: any) => {
+      const {data} = await getProduct(_id);
+      var cart = JSON.parse(localStorage.getItem("cart") as string);
+      setCart(cart);
+        if (cart == null){
+            cart = [];
+            cart.push({_id:data._id, name:data.name, price:data.price, image:data.image, quantily: 1});
+        }else{
+            let item = carts.find(item => item._id == _id );
+            
+            if(item) item.quantily++;
+            else cart.push({_id:data._id, name:data.name, price:data.price, image:data.image, quantily: 1});
+            console.log(item);
+        }
+        localStorage.setItem("cart", JSON.stringify(cart));
+    }
     return(
         <>
         <div className="bg-[url('https://th.bing.com/th/id/R.fb58f2b4c29d7c48fba860ec4996fbc9?rik=k9KcUv3c0PjoEg&pid=ImgRaw&r=0&sres=1&sresct=1')] w-full bg-no-repeat bg-cover relative h-96">
@@ -32,12 +52,13 @@ function HomePage(){
             </div>
             <div className="px-4">
           <div className="text-center mt-4">
-            <a href="#" className="text-2xl pt-8 hover:text-purple-400 border-b-4 border-purple-300 pb-2 font-medium">SẢN PHẨM BÁN CHẠY</a><br/><br/>
-            <a href="#" className="hover:text-purple-400 mt-4">Xem thêm</a>
+            <a href="#" className="text-2xl pt-8 hover:text-red-600 border-b-4 border-red-600 pb-2 font-medium">SẢN PHẨM BÁN CHẠY</a><br/><br/>
+            <a href="#" className="hover:text-red-600 mt-4"><Link className="hover:text-red-600" to={"/product"}>Xem thêm</Link></a>
           </div>
           <div className="grid grid-cols-4 gap-2 mt-4">
             {
               products.map((data) => 
+                data.status == 1 ?
                 <div className=" border border-r-gray-900 border-l-gray-900" key={data._id}>
                   <img className="w-full px-2" src="https://th.bing.com/th/id/R.85c5b8c2edbddfc1cf8d9bae61c065e2?rik=G8ASwy0iqPvAcQ&pid=ImgRaw&r=0" alt=""/><br/>
                   <div className="">
@@ -47,9 +68,10 @@ function HomePage(){
                   <hr className="ml-6 w-60 my-3 " />
                   <div className="flex">
                     <button className="ml-5 mb-3 h-9 w-28 pl-6 pt-1 rounded-full flex items-start  border text-white border-red-500 bg-blue-500 hover:bg-red-500 hover:text-white" > <Link className="hover:text-white" to={`/product/${data._id}`}>Chi tiết</Link> </button>
-                    <button className="ml-9 mb-3 h-9 w-24 rounded-full border border-red-500   hover:bg-orange-600 hover:text-white" >MUA</button>
+                    <button className="ml-9 mb-3 h-9 w-24 rounded-full border border-red-500   hover:bg-orange-600 hover:text-white" onClick={() => {handleAddToCart(data._id)}} >MUA</button>
                   </div>
-                </div>
+                </div> 
+                : null
               )
             }
           </div>
@@ -78,8 +100,8 @@ function HomePage(){
 
           <div className="px-4">
             <div className="text-center mt-4">
-              <a href="#" className="text-2xl pt-8 hover:text-purple-400 border-b-4 border-purple-300 pb-2 font-medium">SẢN PHẨM MỚI</a><br/><br/>
-              <a href="#" className="hover:text-purple-400 mt-4">Xem thêm</a>
+              <a href="#" className="text-2xl pt-8 hover:text-red-600 border-b-4 border-red-600 pb-2 font-medium">SẢN PHẨM MỚI</a><br/><br/>
+              <a href="#" className="hover:text-red-600 mt-4">Xem thêm</a>
             </div>
             <div className="grid grid-cols-4 gap-2 mt-4">
               <div className="">

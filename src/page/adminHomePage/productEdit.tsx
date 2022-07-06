@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { productType } from "../../type/productType";
 import { SubmitHandler, useForm} from "react-hook-form";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { getProduct, getProducts, update } from "../../api/product";
+import { getProduct, getProducts, removeFile, update, upload } from "../../api/product";
 import { getAll } from "../../api/category";
 import { getValue } from "@testing-library/user-event/dist/utils";
 
@@ -16,13 +16,16 @@ type inputs = {
     desc: string,
     image: string,
     status: number,
-    category: string
+    category: string,
+    public_id: string
 }
 type ProductEditProps = {
 }
 function ProductEdit(props: ProductEditProps){
 
     const { register, handleSubmit, formState:{errors}, reset} = useForm<inputs>();
+    const [reviewSource, setReviewSource] = useState<string>();
+    const [product, setProduct] = useState<productType>();
     //lấy id
     const {id} = useParams();
     
@@ -38,7 +41,8 @@ function ProductEdit(props: ProductEditProps){
         getProductlist();
     },[]);
     //get product
-    const [product, setProduct] = useState<productType>();
+    
+    
     
     useEffect(() => {
         if(id){
@@ -47,6 +51,10 @@ function ProductEdit(props: ProductEditProps){
                 reset(data);
                 setProduct(data);
             }
+            console.log(product?.image);
+            
+            setReviewSource(product?.image);
+            
             getProductEdit();
         }
         
@@ -65,14 +73,31 @@ function ProductEdit(props: ProductEditProps){
     const onHandleEdit = async (product: any, id: string| undefined) => {
         try {
           const {data} = await update(product, id);
-      
           setProducts(products.map(item => item._id === data.id ? product : item))
         } catch (error) {
           
         }
-      }
+    }
+      const handleImage = (e: any) => {
+        const file = e.target.files[0]
+        reviewFile(file)
+        
+    }
+    const reviewFile = (file:any) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onloadend = () => {
+            setReviewSource(reader.result as string)
+            console.log(reviewSource);
+            
+        }
+    }
     //submit
-    const onSubmit: SubmitHandler<inputs> = (data) => {
+    const onSubmit: SubmitHandler<inputs> = async (data) => {
+        removeFile(product?.public_id)
+        const { url, public_id } = await (await upload(reviewSource)).json();
+        data.public_id = public_id;
+        data.image = url;
         onHandleEdit(data, id);
         navigate("/admin/product")
     }
@@ -99,8 +124,11 @@ function ProductEdit(props: ProductEditProps){
     </div>
     <div className="form-group flex flex-col items-start">
         <label htmlFor="exampleInputPassword1">Giá</label>
-        <input type="text" className="form-control" id="exampleInputPassword1" {...register("image",{required: true})} placeholder="thêm ảnh sản phẩm"/>
+        <input type="file" className="form-control" id="exampleInputPassword1" {...register("image",{required: true})} onChange={handleImage} placeholder="thêm ảnh sản phẩm"/>
         {errors.image && <span>Bắt buộc nhập trường này</span>}
+    </div>
+    <div className="form-group flex flex-col items-start my-4 ">
+        { reviewSource ? <img width={300} src={reviewSource} alt="" /> : <img width={300} src="https://thumbs.dreamstime.com/b/no-thumbnail-image-placeholder-forums-blogs-websites-148010362.jpg" alt="" />}
     </div>
     <div className="form-group flex flex-col items-start">
         <label htmlFor="exampleInputPassword1">Giá</label>

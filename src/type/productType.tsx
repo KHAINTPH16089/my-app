@@ -5,7 +5,8 @@ export type productType = {
     desc: string,
     image: string,
     status: number,
-    category: string
+    category: string,
+    public_id: string
 }
 export type userType = {
     userName: string,
