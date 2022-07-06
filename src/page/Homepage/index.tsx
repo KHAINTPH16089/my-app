@@ -6,7 +6,8 @@ type productType = {
   _id: number | string,
   name: string,
   price: number,
-  status: number
+  status: number,
+  image: string
 }
 type cartType = {
   _id:string, name:string, price:number, image:string, quantily: number
@@ -60,7 +61,7 @@ function HomePage(){
               products.map((data) => 
                 data.status == 1 ?
                 <div className=" border border-r-gray-900 border-l-gray-900" key={data._id}>
-                  <img className="w-full px-2" src="https://th.bing.com/th/id/R.85c5b8c2edbddfc1cf8d9bae61c065e2?rik=G8ASwy0iqPvAcQ&pid=ImgRaw&r=0" alt=""/><br/>
+                  <img className="w-full px-2" src={data.image} alt=""/><br/>
                   <div className="">
                     <p className="flex items-start mb-2 ml-5 text-red-500 font-bold  ">{data.price}<u>đ</u></p>
                     <Link to={`/product/${data._id}`} className="flex font-semibold text-xl items-start ml-5 hover:text-orange-600">{data.name}</Link>
